@@ -142,3 +142,5 @@ Default values:
 - [x] Add subject parameter
 - [x] Fix counting of elapsed and paused times
 - [x] Colorize hashtags in list
+- [x] Prefix time tracking log file with today date
+- [ ] Fix date expression replacement
