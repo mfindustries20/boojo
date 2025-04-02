@@ -100,6 +100,16 @@ go run main.go add ". Write a +blog article @home due:2024-10-12"
 go run main.go add -l daily -p A ". Write a +blog article @home due:2024-10-12"
 ```
 
+### Time tracking
+
+- Start a task with time tracking by entering a command
+- Display
+  - Start time of progress
+  - Progress (in minutes and seconds)
+- Pause time tracking by Pressing key 'P'
+- Continue time tracking by Pressing key 'R'
+- Finish time tracking by Pressing 'Q' or 'Esc
+
 Default values:
 
 - List: `daily`
@@ -124,3 +134,6 @@ Default values:
 - [x] Allow hyphen and underscore in regex for context, project and counter; add rootCmd for Cobra
 - [x] Fix maxLineNumberLen for filtered entries
 - [x] Set Version field in root command
+- [x] Create command to track time
+- [x] Log time tracking
+- [x] Add Pomodoro cycles to time tracking

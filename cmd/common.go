@@ -5,6 +5,19 @@ import (
 	"path/filepath"
 )
 
+type cliColor string
+
+const (
+	RESET   cliColor = "\033[0m"
+	RED     cliColor = "\033[31m"
+	GRAY    cliColor = "\033[37m"
+	GREEN   cliColor = "\033[32m"
+	YELLOW  cliColor = "\033[33m"
+	BLUE    cliColor = "\033[34m"
+	MAGENTA cliColor = "\033[35m"
+	CYAN    cliColor = "\033[36m"
+)
+
 type layoutType string
 
 const (
