@@ -138,3 +138,4 @@ Default values:
 - [x] Log time tracking
 - [x] Add Pomodoro cycles to time tracking
 - [x] Add subject parameter
+- [x] Fix counting of elapsed and paused times 
