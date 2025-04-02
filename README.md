@@ -136,4 +136,5 @@ Default values:
 - [x] Set Version field in root command
 - [x] Create command to track time
 - [x] Log time tracking
-- [ ] Add Pomodoro cycles to time tracking
+- [x] Add Pomodoro cycles to time tracking
+- [x] Add subject parameter

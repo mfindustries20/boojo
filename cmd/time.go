@@ -11,6 +11,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const workDuration = 25 * time.Minute
+const breakDuration = 5 * time.Minute
+
+var subject string
+
 var timeCmd = &cobra.Command{
 	Use:   "time",
 	Short: "Start time tracking for a task",
@@ -25,8 +30,20 @@ var timeCmd = &cobra.Command{
 		logger := log.New(logFile, "", log.LstdFlags)
 
 		startTime := time.Now()
-		fmt.Printf("[%s] %sTime tracking started%s\n", startTime.Format("15:04:05"), GREEN, RESET)
-		logger.Printf("[%s] Time tracking started\n", startTime.Format("15:04:05"))
+		isWorkPeriod := true
+		cycleStart := time.Now()
+
+		if subject != "" {
+			logger.Printf("Time tracking started for [%s]\n", subject)
+		} else {
+			logger.Printf("Time tracking started\n")
+		}
+		if subject != "" {
+			fmt.Printf("[%s] %sTime tracking started%s for %s", startTime.Format("15:04:05"), GREEN, RESET, subject)
+		} else {
+			fmt.Printf("[%s] %sTime tracking started%s", startTime.Format("15:04:05"), GREEN, RESET)
+		}
+		fmt.Println()
 
 		var totalPaused time.Duration
 		var elapsed time.Duration
@@ -55,38 +72,55 @@ var timeCmd = &cobra.Command{
 
 				switch char {
 				case 'q', 'Q':
-					fmt.Printf("\n[%s] %sTime tracking stopped%s", time.Now().Format("15:04:05"), RED, RESET)
-					fmt.Printf("\nTotal paused: %02d:%02d", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
-					fmt.Printf("\nTotal progress: %02d:%02d\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
-					logger.Printf("[%s] Time tracking stopped\n", time.Now().Format("15:04:05"))
+					if subject != "" {
+						logger.Printf("Time tracking stopped for [%s]\n", subject)
+					} else {
+						logger.Printf("Time tracking stopped\n")
+					}
 					logger.Printf("Total paused: %02d:%02d\n", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
 					logger.Printf("Total progress: %02d:%02d\n\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
+					if subject != "" {
+						fmt.Printf("\n[%s] %sTime tracking stopped%s for %s", time.Now().Format("15:04:05"), RED, RESET, subject)
+					} else {
+						fmt.Printf("\n[%s] %sTime tracking stopped%s", time.Now().Format("15:04:05"), RED, RESET)
+					}
+					fmt.Printf("\nTotal paused: %02d:%02d", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
+					fmt.Printf("\nTotal progress: %02d:%02d\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
 					os.Exit(0)
 				case 'p', 'P':
 					if !paused {
 						pauseStart = time.Now()
 						paused = true
+						logger.Printf("Tracking paused\n")
 						fmt.Printf("\n[%s] %sTracking paused%s", time.Now().Format("15:04:05"), YELLOW, RESET)
-						logger.Printf("[%s] Tracking paused\n", time.Now().Format("15:04:05"))
 					}
 				case 'r', 'R':
 					if paused {
 						paused = false
 						pausedDuration := time.Since(pauseStart)
 						totalPaused += pausedDuration
-						fmt.Printf("\nPause duration: %02d:%02d", int(pausedDuration.Minutes()), int(pausedDuration.Seconds())%60)
+						logger.Printf("[Pause]: %02d:%02d", int(pausedDuration.Minutes()), int(pausedDuration.Seconds())%60)
+						fmt.Printf("\n[Pause]: %02d:%02d", int(pausedDuration.Minutes()), int(pausedDuration.Seconds())%60)
+						logger.Printf("Tracking resumed\n")
 						fmt.Printf("\n[%s] %sTracking resumed%s\n", time.Now().Format("15:04:05"), GREEN, RESET)
-						logger.Printf("[%s] Tracking resumed\n", time.Now().Format("15:04:05"))
 					}
 				}
 
 				if key == keyboard.KeyEsc {
-					fmt.Printf("\n[%s] %sTime tracking stopped%s", time.Now().Format("15:04:05"), RED, RESET)
-					fmt.Printf("\nTotal paused: %02d:%02d", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
-					fmt.Printf("\nTotal progress: %02d:%02d\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
-					logger.Printf("[%s] Time tracking stopped\n", time.Now().Format("15:04:05"))
+					if subject != "" {
+						logger.Printf("Time tracking stopped for [%s]\n", subject)
+					} else {
+						logger.Printf("Time tracking stopped\n")
+					}
 					logger.Printf("Total paused: %02d:%02d\n", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
 					logger.Printf("Total progress: %02d:%02d\n\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
+					if subject != "" {
+						fmt.Printf("\n[%s] %sTime tracking stopped%s for %s", time.Now().Format("15:04:05"), RED, RESET, subject)
+					} else {
+						fmt.Printf("\n[%s] %sTime tracking stopped%s", time.Now().Format("15:04:05"), RED, RESET)
+					}
+					fmt.Printf("\nTotal paused: %02d:%02d", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
+					fmt.Printf("\nTotal progress: %02d:%02d\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
 					os.Exit(0)
 				}
 			}
@@ -96,16 +130,38 @@ var timeCmd = &cobra.Command{
 			select {
 			case <-ticker.C:
 				if !paused {
-					elapsed = time.Since(startTime) - totalPaused
-					fmt.Printf("\rProgress: %02d:%02d", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
+					elapsed = time.Since(cycleStart)
+					if isWorkPeriod && elapsed >= workDuration {
+						logger.Printf("Work period completed. Starting break.")
+						fmt.Printf("\n[%s] ✅ Work period done. Time for a break!\n", time.Now().Format("15:04:05"))
+						isWorkPeriod = false
+						cycleStart = time.Now()
+					} else if !isWorkPeriod && elapsed >= breakDuration {
+						logger.Printf("Break completed. Starting new work period.")
+						fmt.Printf("\n[%s] ☕ Break over. Back to work!\n", time.Now().Format("15:04:05"))
+						isWorkPeriod = true
+						cycleStart = time.Now()
+					} else {
+						minutes := int(elapsed.Minutes())
+						seconds := int(elapsed.Seconds()) % 60
+						mode := "Work"
+						if !isWorkPeriod {
+							mode = "Break"
+						}
+						fmt.Printf("\r[%s] %02d:%02d", mode, minutes, seconds)
+					}
 				}
 			case <-quit:
+				if subject != "" {
+					logger.Printf("Time tracking interrupted for [%s]\n", subject)
+				} else {
+					logger.Printf("Time tracking interrupted\n")
+				}
+				logger.Printf("Total paused: %02d:%02d\n", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
+				logger.Printf("Total progress: %02d:%02d\n\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
 				fmt.Printf("\n[%s] Time tracking interrupted", time.Now().Format("15:04:05"))
 				fmt.Printf("\nTotal paused: %02d:%02d", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
 				fmt.Printf("\nTotal progress: %02d:%02d\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
-				logger.Printf("[%s] Time tracking interrupted\n", time.Now().Format("15:04:05"))
-				logger.Printf("Total paused: %02d:%02d\n", int(totalPaused.Minutes()), int(totalPaused.Seconds())%60)
-				logger.Printf("Total progress: %02d:%02d\n\n", int(elapsed.Minutes()), int(elapsed.Seconds())%60)
 				return
 			}
 		}
@@ -113,5 +169,6 @@ var timeCmd = &cobra.Command{
 }
 
 func init() {
+	timeCmd.Flags().StringVarP(&subject, "subject", "s", "", "Subject for this time tracking session")
 	rootCmd.AddCommand(timeCmd)
 }
