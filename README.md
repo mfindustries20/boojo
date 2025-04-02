@@ -2,6 +2,17 @@
 
 Boojo is a cli tool for maintaining digital and extended bullet lists - take care of your tasks, events and notes.
 
+## Installation
+
+Build and run local binary with
+
+```shell
+git clone https://github.com/zoeller-io/boojo.git
+cd boojo
+go build -o boojo
+./boojo --help
+```
+
 ## Use Cases
 
 - Tasks
@@ -71,9 +82,9 @@ Pattern examples:
 ### List tasks
 
 ```shell
-go run main.go ls
-go run main.go ls -a
-go run main.go ls -am
+./boojo ls
+./boojo ls -a
+./boojo ls -am
 ```
 
 With filter:
@@ -104,4 +115,12 @@ Default values:
 
 ## List of Open Points
 
-- Add key-value tag to track efforts (e. g. `ph:0.5`)
+- [ ] Get log file path by helper function
+- [x] Add key-value tag to track efforts (e. g. `ph:0.5`)
+- [x] Refactor statistics
+- [x] Use enums for task status and entry layout
+- [x] Add recurrence parsing
+- [x] Modify sort of entries, display infinity sign to mark recurring task
+- [x] Allow hyphen and underscore in regex for context, project and counter; add rootCmd for Cobra
+- [x] Fix maxLineNumberLen for filtered entries
+- [x] Set Version field in root command
