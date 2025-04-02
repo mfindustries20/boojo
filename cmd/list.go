@@ -296,8 +296,7 @@ func printEntries(entries []task) {
 	projectTags := map[string]int{}
 	contextTags := map[string]int{}
 
-	// @todo Fix maxLineNumberLen for filtered entries
-	maxLineNumberLen := len(strconv.Itoa(len(entries)))
+	maxLineNumberLen := len(strconv.Itoa(stats.totalFileEntries))
 
 	for _, task := range entries {
 		line := task._line
