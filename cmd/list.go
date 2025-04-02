@@ -43,6 +43,7 @@ type statistics struct {
 	totalNotes          int
 	projectTags         map[string]int
 	contextTags         map[string]int
+	hashtags            map[string]int
 	filters             map[string]int
 	totalEffort         float32
 }
@@ -79,10 +80,10 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().StringVarP(&logType, "log", "l", "", "Log type (daily, monthly, future)")
 	listCmd.Flags().BoolVarP(&filterAll, "all", "a", false, "Display all entries")
 	listCmd.Flags().BoolVarP(&displayMeta, "meta", "m", false, "Display extra line with meta infos (with key/value pairs, creation date, completion date etc.)")
+	rootCmd.AddCommand(listCmd)
 }
 
 func readAndProcessFile(fileName string) ([]task, error) {
@@ -291,10 +292,11 @@ func printEntries(entries []task) {
 	priorityRegex := regexp.MustCompile(`\([ABC]\)`)
 	contextRegex := regexp.MustCompile(`@[A-Za-z0-9ÄÖÜäöüß\-_]+`)
 	projectRegex := regexp.MustCompile(`\+[A-Za-z0-9ÄÖÜäöüß\-_]+`)
-	counterRegex := regexp.MustCompile(`\s#[A-Za-z0-9ÄÖÜäöüß\-_]+`)
+	hashtagRegex := regexp.MustCompile(`#[A-Za-z0-9ÄÖÜäöüß\-_]+`)
 
 	projectTags := map[string]int{}
 	contextTags := map[string]int{}
+	hashtags := map[string]int{}
 
 	maxLineNumberLen := len(strconv.Itoa(stats.totalFileEntries))
 
@@ -305,7 +307,7 @@ func printEntries(entries []task) {
 		line = dueRegex.ReplaceAllString(line, "")
 		dateRegex := regexp.MustCompile(`\d{4}-\d{2}-\d{2}\s`)
 		line = dateRegex.ReplaceAllString(line, "")
-		//line = counterRegex.ReplaceAllString(line, "")
+		//line = hashtagRegex.ReplaceAllString(line, "")
 		line = recurrenceRegex.ReplaceAllString(line, "")
 		line = effortRegex.ReplaceAllString(line, "")
 
@@ -337,16 +339,17 @@ func printEntries(entries []task) {
 				})
 			}
 		}
-		line = contextRegex.ReplaceAllStringFunc(line, func(context string) string {
-			contextTags[context]++
-			return blue + context + reset
+		line = contextRegex.ReplaceAllStringFunc(line, func(contextTag string) string {
+			contextTags[contextTag]++
+			return blue + contextTag + reset
 		})
-		line = projectRegex.ReplaceAllStringFunc(line, func(project string) string {
-			projectTags[project]++
-			return magenta + project + reset
+		line = projectRegex.ReplaceAllStringFunc(line, func(projectTag string) string {
+			projectTags[projectTag]++
+			return magenta + projectTag + reset
 		})
-		line = counterRegex.ReplaceAllStringFunc(line, func(counter string) string {
-			return gray + counter + reset
+		line = hashtagRegex.ReplaceAllStringFunc(line, func(hashtag string) string {
+			hashtags[hashtag]++
+			return string(CYAN) + hashtag + string(RESET)
 		})
 
 		// Display infinity sign at the end of a line to mark recurring task
@@ -427,6 +430,7 @@ func printEntries(entries []task) {
 	)
 	fmt.Printf("%d project(s) %s%s%s\n", len(projectTags), magenta, printSortedTags(projectTags), reset)
 	fmt.Printf("%d context(s) %s%s%s\n", len(contextTags), blue, printSortedTags(contextTags), reset)
+	fmt.Printf("%d hashtag(s) %s%s%s\n", len(hashtags), CYAN, printSortedTags(hashtags), RESET)
 	fmt.Printf("ph %s%.2f%s\n", green, stats.totalEffort, reset)
 }
 

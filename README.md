@@ -2,6 +2,8 @@
 
 Boojo is a cli tool for maintaining digital and extended bullet lists - take care of your tasks, events and notes.
 
+Simply track time with Pomodoro Technique.
+
 ## Installation
 
 Build and run local binary with
@@ -138,4 +140,5 @@ Default values:
 - [x] Log time tracking
 - [x] Add Pomodoro cycles to time tracking
 - [x] Add subject parameter
-- [x] Fix counting of elapsed and paused times 
+- [x] Fix counting of elapsed and paused times
+- [x] Colorize hashtags in list
