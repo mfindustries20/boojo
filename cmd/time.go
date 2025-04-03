@@ -117,12 +117,14 @@ var timeCmd = &cobra.Command{
 						totalElapsed += phaseElapsed
 						logger.Printf("Work session completed. Starting break.")
 						fmt.Printf("\n[%s] Work session complete. %sTime for a ☕ break!%s\n", time.Now().Format("15:04:05"), YELLOW, RESET)
+						fmt.Print("\a")
 						isWorkPeriod = false
 						breakCount++
 						phaseElapsed = 0
 					} else if !isWorkPeriod && phaseElapsed >= breakDuration {
 						logger.Printf("Break completed. Starting new work session.")
 						fmt.Printf("\n[%s] Break session complete. %sBack to 💻 work!%s\n", time.Now().Format("15:04:05"), GREEN, RESET)
+						fmt.Print("\a")
 						isWorkPeriod = true
 						workCount++
 						phaseElapsed = 0
