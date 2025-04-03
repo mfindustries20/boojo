@@ -83,8 +83,15 @@ Pattern examples:
 
 ### List tasks
 
+Shows all open tasks from past to today, and notes from today.
+
 ```shell
 ./boojo ls
+```
+
+With options:
+
+```shell
 ./boojo ls -a
 ./boojo ls -am
 ```
@@ -92,7 +99,7 @@ Pattern examples:
 With filter:
 
 ```shell
-go run main.go ls blog
+./boojo ls ls blog
 ```
 
 ### Add a task
@@ -143,4 +150,8 @@ Default values:
 - [x] Fix counting of elapsed and paused times
 - [x] Colorize hashtags in list
 - [x] Prefix time tracking log file with today date
+- [x] Send beep when pause starts and ends
+- [x] Fix to list all open tasks plus today notes (default behavior)
+- [x] Add option 'c' to list all today completed tasks
+- [x] Add option 'n' to list all today notes
 - [ ] Fix date expression replacement

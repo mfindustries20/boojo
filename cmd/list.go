@@ -51,6 +51,8 @@ type statistics struct {
 var tasks []task
 var stats statistics
 var filterAll bool
+var applyTodayNotes bool
+var applyTodayCompletedTasks bool
 var displayMeta bool
 var dueRegex = regexp.MustCompile(` due:(\d{4}-\d{2}-\d{2})`)
 var effortRegex = regexp.MustCompile(` ph:([0-9]\.\d{1,3})`)
@@ -70,20 +72,15 @@ var listCmd = &cobra.Command{
 		for _, key := range args {
 			stats.filters[key] = 0
 		}
+		entries = applyOptions(entries)
 		if len(stats.filters) > 0 {
-			entries = filterEntries(entries, stats.filters)
+			entries = applyFilters(entries, stats.filters)
 		}
+		stats.totalEntries = len(entries)
 		sortEntries(entries)
 		summarizeEntries(entries)
 		printEntries(entries)
 	},
-}
-
-func init() {
-	listCmd.Flags().StringVarP(&logType, "log", "l", "", "Log type (daily, monthly, future)")
-	listCmd.Flags().BoolVarP(&filterAll, "all", "a", false, "Display all entries")
-	listCmd.Flags().BoolVarP(&displayMeta, "meta", "m", false, "Display extra line with meta infos (with key/value pairs, creation date, completion date etc.)")
-	rootCmd.AddCommand(listCmd)
 }
 
 func readAndProcessFile(fileName string) ([]task, error) {
@@ -183,12 +180,34 @@ func readAndProcessFile(fileName string) ([]task, error) {
 	return tasks, nil
 }
 
-func filterEntries(entries []task, filters map[string]int) []task {
+func applyOptions(entries []task) []task {
+	ny, nm, nd := time.Now().Date()
+	applied := []task{}
+	for _, task := range entries {
+		ty, tm, td := task.createdAt.Date()
+		isCreatedToday := ty == ny && tm == nm && td == nd
+		if task.layout == TASK && task.status == OPEN {
+			// Show all open and past to today tasks...
+			applied = append(applied, task)
+
+		} else if applyTodayNotes && task.layout == NOTE && isCreatedToday {
+			// ... and today notes...
+			applied = append(applied, task)
+		} else if applyTodayCompletedTasks && task.layout == TASK && task.completedAt != nil {
+			// ... and today completed tasks
+			cy, cm, cd := task.completedAt.Date()
+			isCompletedToday := cy == ny && cm == nm && cd == nd
+			if isCompletedToday {
+				applied = append(applied, task)
+			}
+		}
+	}
+	return applied
+}
+
+func applyFilters(entries []task, filters map[string]int) []task {
 	filtered := []task{}
 	for _, task := range entries {
-		if !filterAll && task.status == COMPLETED {
-			continue
-		}
 		line := strings.ToLower(task._line)
 		matchesAll := true
 		for filter, _ := range filters {
@@ -201,7 +220,6 @@ func filterEntries(entries []task, filters map[string]int) []task {
 			filtered = append(filtered, task)
 		}
 	}
-	stats.totalEntries = len(filtered)
 	return filtered
 }
 
@@ -446,4 +464,13 @@ func printSortedTags(tags map[string]int) string {
 	}
 
 	return result
+}
+
+func init() {
+	listCmd.Flags().StringVarP(&logType, "log", "l", "", "Log type (daily, monthly, future)")
+	listCmd.Flags().BoolVarP(&filterAll, "all", "a", false, "Display all entries")
+	listCmd.Flags().BoolVarP(&applyTodayNotes, "notes", "n", false, "Display all today notes")
+	listCmd.Flags().BoolVarP(&applyTodayCompletedTasks, "completed", "c", false, "Display all today completed tasks")
+	listCmd.Flags().BoolVarP(&displayMeta, "meta", "m", false, "Display extra line with meta infos (with key/value pairs, creation date, completion date etc.)")
+	rootCmd.AddCommand(listCmd)
 }
