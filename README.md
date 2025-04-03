@@ -98,9 +98,14 @@ With options:
 
 With filter:
 
+Filter for single or multiple arguments.
+
 ```shell
 ./boojo ls ls blog
+./boojo ls ls blog software
 ```
+
+Currently only `AND` type criteria is implemented for multiple arguments.
 
 ### Add a task
 
@@ -154,4 +159,5 @@ Default values:
 - [x] Fix to list all open tasks plus today notes (default behavior)
 - [x] Add option 'c' to list all today completed tasks
 - [x] Add option 'n' to list all today notes
+- [ ] Add 'OR' type criteria to filter
 - [ ] Fix date expression replacement
