@@ -159,5 +159,6 @@ Default values:
 - [x] Fix to list all open tasks plus today notes (default behavior)
 - [x] Add option 'c' to list all today completed tasks
 - [x] Add option 'n' to list all today notes
+- [ ] Create logs in `log` folder
 - [ ] Add 'OR' type criteria to filter
 - [ ] Fix date expression replacement

@@ -24,8 +24,8 @@ var timeCmd = &cobra.Command{
 	Short: "Start time tracking for a task",
 	Run: func(cmd *cobra.Command, args []string) {
 		now := time.Now()
-		logFileName := fmt.Sprintf("%s_timelog.txt", now.Format("060102"))
-		logFile, err := os.OpenFile(logFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		logFilePath := fmt.Sprintf("log/%s_timelog.txt", now.Format("060102"))
+		logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			fmt.Println("Error opening log file:", err)
 			return
