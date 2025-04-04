@@ -286,6 +286,10 @@ func printEntries(entries []task) {
 	now := time.Now()
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	todayExpr := today.Format("2006-01-02")
+	tty, ttm, ttd := time.Now().Date()
+	tomorrow := today.AddDate(0, 0, 1)
+	tomorrowExpr := tomorrow.Format("2006-01-02")
+	tmy, tmm, tmd := tomorrow.Date()
 
 	// Colors
 	reset := "\033[0m"
@@ -321,8 +325,18 @@ func printEntries(entries []task) {
 	for _, task := range entries {
 		line := task._line
 
+		isDueToday := false
+		isDueTomorrow := false
+		if task.dueAt != nil {
+			dy, dm, dd := task.dueAt.Date()
+			isDueToday = tty == dy && ttm == dm && ttd == dd
+			isDueTomorrow = tmy == dy && tmm == dm && tmd == dd
+		}
+
 		// Remove expressions from line
-		line = dueRegex.ReplaceAllString(line, "")
+		if !isDueToday && !isDueTomorrow {
+			line = dueRegex.ReplaceAllString(line, "")
+		}
 		dateRegex := regexp.MustCompile(`\d{4}-\d{2}-\d{2}\s`)
 		line = dateRegex.ReplaceAllString(line, "")
 		//line = hashtagRegex.ReplaceAllString(line, "")
@@ -399,8 +413,9 @@ func printEntries(entries []task) {
 			}
 		}
 
-		// Highlight today
-		line = strings.Replace(line, todayExpr, yellow+todayExpr+reset, -1)
+		// Highlight today and tomorrow
+		line = strings.Replace(line, todayExpr, string(ON_RED)+todayExpr+string(RESET), -1)
+		line = strings.Replace(line, tomorrowExpr, string(ON_YELLOW)+tomorrowExpr+string(RESET), -1)
 
 		// Add due date diff in days
 		//dueExpr := ""

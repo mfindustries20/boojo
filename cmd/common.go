@@ -7,15 +7,27 @@ import (
 
 type cliColor string
 
+// S. https://gist.github.com/vratiu/9780109
 const (
-	RESET   cliColor = "\033[0m"
-	RED     cliColor = "\033[31m"
-	GRAY    cliColor = "\033[37m"
-	GREEN   cliColor = "\033[32m"
-	YELLOW  cliColor = "\033[33m"
-	BLUE    cliColor = "\033[34m"
-	MAGENTA cliColor = "\033[35m"
-	CYAN    cliColor = "\033[36m"
+	RESET cliColor = "\033[0m"
+	BLACK cliColor = "\033[0;30m"
+	RED   cliColor = "\033[0;31m"
+
+	GREEN  cliColor = "\033[0;32m"
+	YELLOW cliColor = "\033[0;33m"
+	BLUE   cliColor = "\033[0;34m"
+	PURPLE cliColor = "\033[0;35m"
+	CYAN   cliColor = "\033[0;36m"
+	GRAY   cliColor = "\033[0;37m"
+
+	ON_BLACK  cliColor = "\033[40m"
+	ON_RED    cliColor = "\033[41m"
+	ON_GREEN  cliColor = "\033[42m"
+	ON_YELLOW cliColor = "\033[43m"
+	ON_BLUE   cliColor = "\033[44m"
+	ON_PURPLE cliColor = "\033[45m"
+	ON_CYAN   cliColor = "\033[46m"
+	ON_GRAY   cliColor = "\033[47m"
 )
 
 type layoutType string
