@@ -162,5 +162,6 @@ Default values:
 - [x] Create logs in `log` folder
 - [x] Highlight today and tomorrow due dates
 - [x] Add background colors for cli output
+- [x] Display hours next to minutes and seconds in summary and in progress
 - [ ] Add 'OR' type criteria to filter
 - [ ] Fix date expression replacement
