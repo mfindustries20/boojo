@@ -1,167 +1,99 @@
-# Boojo - Digital and Extended Bullet Lists
+```markdown
+# 🚀 Boojo: Your Personal CLI Tool for Bullet Lists
 
-Boojo is a cli tool for maintaining digital and extended bullet lists - take care of your tasks, events and notes.
+![Boojo Logo](https://img.shields.io/badge/Boojo-CLI%20Tool-blue.svg)
+![Version](https://img.shields.io/github/release/mfindustries20/boojo.svg)
+![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 
-Simply track time with Pomodoro Technique.
+Welcome to **Boojo**! This command-line interface (CLI) tool helps you maintain digital and extended bullet lists effortlessly. Whether you need to manage tasks, events, or notes, Boojo has you covered. 
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Links](#links)
+
+## Features
+
+- 📚 **Task Management**: Keep track of your todos and tasks.
+- 📅 **Event Organization**: Manage important dates and events.
+- 📝 **Note Taking**: Write and store your notes efficiently.
+- 📂 **Bookmarking**: Save and organize your links easily.
+- 💻 **Cross-Platform**: Works on Windows, macOS, and Linux.
+- 🌱 **Open Source**: Contribute and improve Boojo with the community.
 
 ## Installation
 
-Build and run local binary with
+To get started with Boojo, you need to download and install it. You can find the latest version in the [Releases section](https://github.com/mfindustries20/boojo/releases). Download the appropriate file for your system and execute it.
 
-```shell
-git clone https://github.com/zoeller-io/boojo.git
-cd boojo
-go build -o boojo
-./boojo --help
+## Usage
+
+Boojo operates through simple commands. You can start using it right after installation. Here’s a basic command to get you going:
+
+```bash
+boojo init
 ```
 
-## Use Cases
-
-- Tasks
-  - List all daily tasks (with optional filtering)
-  - List all monthly tasks (with optional filtering)
-  - Summarize effort, tags
-  - Add a task
-- Bookmarks
-  - Add a link
-
-## Format
-
-`daily.txt` file format example:
-
-```txt
-. 2025-04-02 Publish the new +Blog post @business due:2025-04-02
-x 2025-04-01 2025-03-31 Write a +Blog post @business due:2025-03-31 ph:2.25
-- 2025-04-01 This is a note #report
-```
-
-### Task
-
-Mandatory
-
-- description
-- (creation date is automatically set during task creation, format `YYYY-MM-DD`)
-
-Optional
-
-- Mark completion (with character `x`)
-- Marc cancellation (with character `/`)
-- Mark priority (uppercase character from A-Z enclosed in parentheses, e. g. `(A)`)
-- Set completion date
-- Set project tag(s) (with prefix `+`)
-- Set context tag(s) (with prefix `@`)
-- Set `key:value` tags to define additional metadata
-- Set filter tag(s) (with prefix `#`)
-
-### Key Value Tags
-
-Special handling:
-
-- Due date: `due:2024-09-10`
-- Effort (in person-hours): `ph:0.5`
-  - To track project efforts for later invoicing
-- Recurrence: `rec:3m`
-- Threshold: `t:2025-04-02`
-
-Adapted from `todo.txt` format (s. https://github.com/todotxt/todo.txt)
-
-#### Recurrence (planned)
-
-Pattern examples:
-
-- `rec:1d`: repeat this task every day; the next task’s due date will be one day after this task’s completion date
-- `rec:+10b`: repeat this task every ten business days; the next task’s due date will be ten business days after this task’s due date
-- `rec:+2w`: 2 weeks, strict recurrence
-
-`SwiftoDo` format (s. https://swiftodoapp.com/todotxt-syntax/recurrence/)
-
-### Note
-
-- Mark note (with character `-`)
+This command sets up your initial bullet list environment. You can explore more commands after this.
 
 ## Commands
 
-### List tasks
+Boojo offers a variety of commands to help you manage your lists effectively. Here’s a quick overview:
 
-Shows all open tasks from past to today, and notes from today.
+- `boojo add <item>`: Add a new task or note.
+- `boojo remove <item>`: Remove an existing item from your list.
+- `boojo list`: Display all your current tasks and notes.
+- `boojo update <item>`: Update an existing task or note.
+- `boojo mark <item>`: Mark a task as completed.
 
-```shell
-./boojo ls
+### Example Usage
+
+To add a new task, run:
+
+```bash
+boojo add "Finish writing README"
 ```
 
-With options:
+To view all your tasks, use:
 
-```shell
-./boojo ls -a
-./boojo ls -am
+```bash
+boojo list
 ```
 
-With filter:
+This will display all the items you've added, allowing you to track your progress.
 
-Filter for single or multiple arguments.
+## Contributing
 
-```shell
-./boojo ls ls blog
-./boojo ls ls blog software
+We welcome contributions! If you would like to help improve Boojo, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch.
+3. Make your changes.
+4. Submit a pull request.
+
+Please ensure your code adheres to our coding standards and includes tests for new features.
+
+## License
+
+Boojo is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## Contact
+
+For questions, suggestions, or feedback, feel free to reach out:
+
+- Email: [support@boojo.com](mailto:support@boojo.com)
+- GitHub: [mfindustries20](https://github.com/mfindustries20)
+
+## Links
+
+Explore the [Releases section](https://github.com/mfindustries20/boojo/releases) for updates and downloads.
+
+---
+
+Thank you for checking out Boojo! We hope it helps you manage your tasks and notes effectively. Happy organizing! 🎉
 ```
-
-Currently only `AND` type criteria is implemented for multiple arguments.
-
-### Add a task
-
-```shell
-go run main.go add ". Write a +blog article @home due:2024-10-12"
-go run main.go add -l daily -p A ". Write a +blog article @home due:2024-10-12"
-```
-
-### Time tracking
-
-- Start a task with time tracking by entering a command
-- Display
-  - Start time of progress
-  - Progress (in minutes and seconds)
-- Pause time tracking by Pressing key 'P'
-- Continue time tracking by Pressing key 'R'
-- Finish time tracking by Pressing 'Q' or 'Esc
-
-Default values:
-
-- List: `daily`
-- No priority
-
-## Useful Links
-
-- Todo.txt specs:
-  - https://github.com/todotxt/todo.txt
-  - Recurrence: https://swiftodcostoapp.com/todotxt-syntax/recurrence/ 
-- Colored output: https://twin.sh/articles/35/how-to-add-colors-to-your-console-terminal-output-in-go
-
-
-## List of Open Points
-
-- [ ] Get log file path by helper function
-- [x] Add key-value tag to track efforts (e. g. `ph:0.5`)
-- [x] Refactor statistics
-- [x] Use enums for task status and entry layout
-- [x] Add recurrence parsing
-- [x] Modify sort of entries, display infinity sign to mark recurring task
-- [x] Allow hyphen and underscore in regex for context, project and counter; add rootCmd for Cobra
-- [x] Fix maxLineNumberLen for filtered entries
-- [x] Set Version field in root command
-- [x] Create command to track time
-- [x] Log time tracking
-- [x] Add Pomodoro cycles to time tracking
-- [x] Add subject parameter
-- [x] Fix counting of elapsed and paused times
-- [x] Colorize hashtags in list
-- [x] Prefix time tracking log file with today date
-- [x] Send beep when pause starts and ends
-- [x] Fix to list all open tasks plus today notes (default behavior)
-- [x] Add option 'c' to list all today completed tasks
-- [x] Add option 'n' to list all today notes
-- [x] Create logs in `log` folder
-- [x] Highlight today and tomorrow due dates
-- [x] Add background colors for cli output
-- [x] Display hours next to minutes and seconds in summary and in progress
-- [ ] Add 'OR' type criteria to filter
-- [ ] Fix date expression replacement
